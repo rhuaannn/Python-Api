@@ -1,5 +1,6 @@
 import json
 from django.http import  JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from genres.models import Genre
 
@@ -13,6 +14,7 @@ def genre_create_list_view(request):
     
     elif request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
+        
         #'name' not in data: Esta parte verifica se a chave 'name' não está presente no dicionário data.
         # Se a chave não estiver presente, a condição é avaliada como True.
         # or: Este é um operador lógico que retorna True se pelo menos uma das condições for True.
@@ -39,13 +41,23 @@ def genre_create_list_view(request):
         
 @csrf_exempt
 def genre_detail_view(request, pk):
- try:
-        genre = Genre.objects.get(pk=pk)
-        data = {'id': genre.id, 'name': genre.name}
-        return JsonResponse(data)
+    
+        genre = get_object_or_404(Genre, pk=pk)
+        
+        if request.method == 'GET':
+          data = {'id': genre.id, 'name': genre.name}
+          return JsonResponse(data)
+      
+        elif request.method == 'PUT':
+            data = json.loads(request.body.decode('utf-8'))
+            genre.name = data['name']
+            genre.save()
+            return JsonResponse({'id': genre.id, 'name': genre.name})
     # No Django, quando você usa objects.get() ou get_object_or_404() para recuperar um objeto do banco de dados
     # e não encontra um objeto correspondente, uma exceção chamada DoesNotExist é levantada. Essa exceção faz parte da
     # estrutura do Django
     # para lidar com casos em que uma consulta esperava encontrar um objeto, mas não encontrou.
- except Genre.DoesNotExist:
-        return JsonResponse({'error': 'Genero não encontrado!'}, status=404)
+
+
+ 
+        
