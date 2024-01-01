@@ -20,3 +20,11 @@ def genre_create_list_view(request):
             {'id': new_genre.id, 'name': new_genre.name},
             status=201,
             )
+
+        
+@csrf_exempt
+def genre_detail_view(request, pk):
+    genre = Genre.objects.get(pk=pk)
+    data = {'id': genre.id, 'name': genre.name}
+
+    return JsonResponse(data)
