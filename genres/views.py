@@ -42,7 +42,10 @@ def genre_create_list_view(request):
 @csrf_exempt
 def genre_detail_view(request, pk):
     
-        genre = get_object_or_404(Genre, pk=pk)
+        try:
+            genre = Genre.objects.get(pk=pk)
+        except Genre.DoesNotExist:
+            return JsonResponse({'error': 'Gênero não encontrado!'}, status=404)
         
         if request.method == 'GET':
           data = {'id': genre.id, 'name': genre.name}
@@ -53,6 +56,12 @@ def genre_detail_view(request, pk):
             genre.name = data['name']
             genre.save()
             return JsonResponse({'id': genre.id, 'name': genre.name})
+
+        elif request.method == 'DELETE':
+        
+            genre.delete()
+            return JsonResponse({'message': 'Gênero excluído com sucesso'}, status=204)
+     
     # No Django, quando você usa objects.get() ou get_object_or_404() para recuperar um objeto do banco de dados
     # e não encontra um objeto correspondente, uma exceção chamada DoesNotExist é levantada. Essa exceção faz parte da
     # estrutura do Django
