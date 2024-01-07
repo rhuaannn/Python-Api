@@ -6,4 +6,4 @@ class GenreSerializer(serializers.ModelSerializer):
     
     class Meta:
         model =  Genre
-        fileds = '__all__'
+        fields = '__all__'
