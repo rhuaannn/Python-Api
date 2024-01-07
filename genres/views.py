@@ -3,7 +3,13 @@ from django.http import  JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from genres.models import Genre
+from rest_framework import generics
 
+
+class GenreCreateListView(generics.ListCreateAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = None
+    
 @csrf_exempt
 def genre_create_list_view(request):
 
