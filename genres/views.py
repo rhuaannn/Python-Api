@@ -4,22 +4,22 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from genres.models import Genre
 from rest_framework import generics
-
+from genres.serializers import GenreSerializer
 
 class GenreCreateListView(generics.ListCreateAPIView):
     queryset = Genre.objects.all()
-    serializer_class = None
-    
-@csrf_exempt
-def genre_create_list_view(request):
+    serializer_class = GenreSerializer
 
-    if request.method == 'GET':
-        genres = Genre.objects.all()
-        data = [{'id': genre.id, 'name': genre.name} for genre in genres]
-        return JsonResponse(data, safe=False)
+# @csrf_exempt
+# def genre_create_list_view(request):
+
+#     if request.method == 'GET':
+#         genres = Genre.objects.all()
+#         data = [{'id': genre.id, 'name': genre.name} for genre in genres]
+#         return JsonResponse(data, safe=False)
     
-    elif request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))
+#     elif request.method == 'POST':
+#         data = json.loads(request.body.decode('utf-8'))
         
         #'name' not in data: Esta parte verifica se a chave 'name' não está presente no dicionário data.
         # Se a chave não estiver presente, a condição é avaliada como True.
@@ -32,17 +32,17 @@ def genre_create_list_view(request):
         # de prosseguir com a criação de um novo objeto Genre. Se a condição for verdadeira, a resposta JSON com 
         # a mensagem de erro é retornada; caso contrário, o código continua com a criação do novo objeto Genre.
                 
-        if 'name' not in data or not data['name']:
-            return JsonResponse({'Error': 'Nome é obrigatório!'}, status = 400)
+        # if 'name' not in data or not data['name']:
+        #     return JsonResponse({'Error': 'Nome é obrigatório!'}, status = 400)
         
-        new_genre = Genre(name = data['name'])
+        # new_genre = Genre(name = data['name'])
 
-        new_genre.save()
+        # new_genre.save()
         
-        return JsonResponse(
-            {'id': new_genre.id, 'name': new_genre.name},
-            status=201,
-            )
+        # return JsonResponse(
+        #     {'id': new_genre.id, 'name': new_genre.name},
+        #     status=201,
+        #     )
 
         
 @csrf_exempt
