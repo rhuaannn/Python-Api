@@ -9,6 +9,6 @@ class ReviewCreateListView(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
 
 
-class ReviewRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView)
+class ReviewRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
