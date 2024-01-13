@@ -9,3 +9,6 @@ class Review(models.Model):
         MaxValueValidator(5, 'O máximo de estrela é 5')
     ])
     comment = models.TextField(null=True, blank=True)    
+
+    def __str__(self):
+        return self.movie
