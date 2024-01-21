@@ -3,8 +3,8 @@ from . import views
 
 urlpatterns = [
 
-    path('review/', views.ReviewCreateListView.as_view(), 
+    path('reviews/', views.ReviewCreateListView.as_view(), 
          name='review-create-list'),
-    path('review/<int:pk>', views.ReviewRetrieveUpdateDestroyView.as_view(),
+    path('reviews/<int:pk>', views.ReviewRetrieveUpdateDestroyView.as_view(),
          name='review-detail-view')
 ]
