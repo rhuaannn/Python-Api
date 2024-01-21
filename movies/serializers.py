@@ -20,5 +20,8 @@ class MoviesGetSerializer(serializers.ModelSerializer):
         model = Movies
         fields = ['title', 'release_date', 'resume','actors','genre']
 
-
+    def validate_release_date(self, value):
+        if value.year <= 1990:
+            raise serializers.ValidationError('Data inferior a 1990 não é permitido.')
+        return value
         
