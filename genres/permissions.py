@@ -6,5 +6,7 @@ class GenrePermissionClass(permissions.BasePermission):
 
         if request.method == 'GET':
             return request.user.has_perm('genres.view_genre')
-        
+
+        if request.method == 'POST':
+            return request.user.has_perm('genres.add_genre')
         return False
