@@ -6,7 +6,7 @@ from movies.serializers import MoviesGetSerializer, MoviesSerializer
  
 class MovieCreateListView(generics.ListCreateAPIView):
     
-    permission_classes = (IsAuthenticated)
+    permission_classes = (IsAuthenticated,)
     queryset = Movies.objects.all()
     serializer_class = MoviesSerializer
 
