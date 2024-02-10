@@ -1,5 +1,6 @@
 from django.db.models import Avg
 from rest_framework import serializers
+from genres.serializers import GenreSerializer
 from movies.models import Movies
 from actors.serializers import ActorGetNameSerializer
 
@@ -34,16 +35,17 @@ class MoviesSerializer(serializers.ModelSerializer):
 
 class MoviesGetSerializer(serializers.ModelSerializer):
     actors = ActorGetNameSerializer(many=True)
+    genre = GenreSerializer()
     rate = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Movies
         fields = ['id', 'title', 'release_date',
-                  'resume', 'actors', 'rate', 'genre']
+                  'resume', 'genre', 'actors', 'rate', ]
 
     def get_rate(self, obj):
         rate = obj.reviews.aggregate(Avg('stars'))['stars__avg']
 
         if rate:
             return round(rate, 1)
-        return 'Avaliçãoes insuficiente '
+        return 'Avaliações insuficientes para calcular uma média'
