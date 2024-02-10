@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from movies.models import Movies
 
+
 class Review(models.Model):
     movie = models.ForeignKey(Movies, on_delete=models.PROTECT, related_name='reviews')
     stars = models.IntegerField(validators=[
@@ -11,4 +12,4 @@ class Review(models.Model):
     comment = models.TextField(null=True, blank=True)    
 
     def __str__(self):
-        return  str(self.movie)
+        return str(self.movie)

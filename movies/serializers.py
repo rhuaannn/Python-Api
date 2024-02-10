@@ -1,7 +1,6 @@
 from django.db.models import Avg
 from rest_framework import serializers
 from movies.models import Movies
-
 from actors.serializers import ActorGetNameSerializer
 
 
@@ -14,12 +13,12 @@ class MoviesSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_rate(self, obj):
-        rate =  obj.reviews.aggregate(Avg('stars'))['stars__avg']
-        
+        rate = obj.reviews.aggregate(Avg('stars'))['stars__avg']
+
         if rate:
-            return round(rate,1)
+            return round(rate, 1)
         return 'Avaliçãoes insuficiente '
-                
+
     def validate_release_date(self, value):
         if value.year <= 1900:
             raise serializers.ValidationError(
@@ -46,5 +45,5 @@ class MoviesGetSerializer(serializers.ModelSerializer):
         rate = obj.reviews.aggregate(Avg('stars'))['stars__avg']
 
         if rate:
-            return round(rate,1)
+            return round(rate, 1)
         return 'Avaliçãoes insuficiente '
