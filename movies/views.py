@@ -1,12 +1,15 @@
-from rest_framework  import generics, views, response, status
+from rest_framework import generics, views, response, status
+from django.db.models import Count, Avg
 from rest_framework.permissions import IsAuthenticated
 from app.permission import GlobalDefaultPermission
 from movies.models import Movies
 from movies.serializers import MoviesGetSerializer, MoviesSerializer
- 
+from reviews.models import Review
+
+
 class MovieCreateListView(generics.ListCreateAPIView):
-    
-    permission_classes = (IsAuthenticated,GlobalDefaultPermission)
+
+    permission_classes = (IsAuthenticated, GlobalDefaultPermission)
     queryset = Movies.objects.all()
     serializer_class = MoviesSerializer
 
@@ -15,10 +18,11 @@ class MovieCreateListView(generics.ListCreateAPIView):
             return MoviesGetSerializer
         return MoviesSerializer
 
+
 class MovieRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthenticated,GlobalDefaultPermission)
+    permission_classes = (IsAuthenticated, GlobalDefaultPermission)
     queryset = Movies.objects.all()
-    serializer_class =  MoviesSerializer
+    serializer_class = MoviesSerializer
 
 
 class MovieStatsView(views.APIView):
@@ -27,7 +31,19 @@ class MovieStatsView(views.APIView):
 
     def get(self, request):
 
+        total_movies = self.queryset.count()
+        movies_by_genres = self.queryset.values(
+            'genre__name').annotate(count=Count('id'))
+        total_reviews = Review.objects.count()
+        avarege_stars = Review.objects.aaggregate(
+            avg_stars=Avg('stars'))['avg_stars']
+
         return response.Response(
-            data = {'message': 'bateu aqui'},
-            status = status.HTTP_200_OK,
+            data={
+                'total_movies': total_movies,
+                'movies_by_genres': movies_by_genres,
+                'total_reviews': total_reviews,
+                'avarege_stars': avarege_stars,
+            },
+            status=status.HTTP_200_OK,
         )
