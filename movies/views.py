@@ -22,7 +22,13 @@ class MovieCreateListView(generics.ListCreateAPIView):
 class MovieRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated, GlobalDefaultPermission)
     queryset = Movies.objects.all()
-    serializer_class = MoviesSerializer
+ 
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return MoviesGetSerializer
+        return MoviesSerializer
+
 
 
 class MovieStatsView(views.APIView):

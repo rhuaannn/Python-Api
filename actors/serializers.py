@@ -11,4 +11,4 @@ class ActorSerializer(serializers.ModelSerializer):
 class ActorGetNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actors
-        fields = ['name']
+        fields = ['name', 'nationality']
