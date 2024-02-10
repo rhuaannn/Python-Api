@@ -35,7 +35,7 @@ class MovieStatsView(views.APIView):
         movies_by_genres = self.queryset.values(
             'genre__name').annotate(count=Count('id'))
         total_reviews = Review.objects.count()
-        avarege_stars = Review.objects.aaggregate(
+        avarege_stars = Review.objects.aggregate(
             avg_stars=Avg('stars'))['avg_stars']
 
         return response.Response(
@@ -43,7 +43,7 @@ class MovieStatsView(views.APIView):
                 'total_movies': total_movies,
                 'movies_by_genres': movies_by_genres,
                 'total_reviews': total_reviews,
-                'avarege_stars': avarege_stars,
+                'avarege_stars': round(avarege_stars, 1) if avarege_stars else 0,
             },
             status=status.HTTP_200_OK,
         )
